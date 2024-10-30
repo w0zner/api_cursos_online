@@ -1,0 +1,23 @@
+# Ignorar la carpeta node_modules
+node_modules/
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar dist (directorios de compilación)
+# dist/
+
+# Ignorar los archivos de entorno
+.env
+
+# Ignorar las carpetas de configuraciones de los editores
+.vscode/
+.idea/
+
+# Ignorar los archivos de salida de compilaciones
+out/
+
+# Ignorar lock files opcionales
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
