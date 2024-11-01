@@ -20,7 +20,14 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, 'public')))
-app.use('/api/', router)
+
+app.use((req, res, next) => {
+    console.log(`Recibida petición ${req.method} en ${req.path}`);
+    next();
+});
+
+
+app.use('/api', router)
 app.set('port', puerto)
 
 app.listen(app.get('port'), ()=> {
