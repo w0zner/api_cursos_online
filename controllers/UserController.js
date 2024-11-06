@@ -70,6 +70,49 @@ const login= async(req, res)=> {
     }
 }
 
+const login_admin= async(req, res)=> {
+    try {
+        const {email, password} = req.body
+        const user= await models.User.findOne({email: email, state: 1, rol: 'ADMIN'});
+
+        if(user) {
+            let compare = await bcrypt.compare(password, user.password);
+            if(compare) {
+                let tokenT = await token.enconde(user._id, user.rol, user.email);
+
+                const user_body = {
+                    token: tokenT,
+                    user: {
+                        name: user.name,
+                        surname: user.surname,
+                        email: user.email,
+                        //avatar: user.avatar
+                    }
+                }
+
+                res.status(200).json({
+                    user: user_body
+                })
+            } else {
+                res.status(404).json({
+                    msg: "Usuario o contraseña no válido.",
+                }) 
+            }
+        } else {
+            res.status(404).json({
+                msg: "Usuario o contraseña no válido.",
+            })
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: "Error inesperado en user.login",
+        })
+    }
+}
+
 const getUsers = async(req, res)=> {
     try {
         const {nombre} = req.body
@@ -88,5 +131,6 @@ const getUsers = async(req, res)=> {
 export default {
     getUsers,
     register,
-    login
+    login,
+    login_admin
 }
