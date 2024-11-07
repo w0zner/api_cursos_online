@@ -4,6 +4,18 @@ import token from "../services/token"
 
 const register = async(req, res)=> {
     try {
+
+        const { email } = req.body.email
+        console.log(email)
+
+        const user_exist= await models.User.findOne({email: req.body.email})
+
+        if(user_exist) {
+            res.status(403).json({
+                msg: "Ya existe un usuario registrado con el email " + req.body.email
+            })
+        }
+
         //Encriptación de contraseña
         req.body.password= await bcrypt.hash(req.body.password, 10);
 
