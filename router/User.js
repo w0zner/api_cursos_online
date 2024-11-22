@@ -8,5 +8,4 @@ router.post("/register", userController.register)
 router.post("/login", userController.login)
 router.post("/login-admin", userController.login_admin)
 
-
 export default router
