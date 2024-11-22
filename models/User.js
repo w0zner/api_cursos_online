@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     state: {type:Number, default:1},
     phone: {type:String, maxlength:30, required: false},
     birthday: {type:String, maxlength:30, required: false},
-    is_instructor: {type:Number, required: false, default: null},
+    //is_instructor: {type:Number, required: false, default: null},
     profesion: {type:String, maxlength:250, required: false},
     description: {type:String, required: false}
 },{timestamps: true});
