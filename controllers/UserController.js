@@ -140,6 +140,41 @@ const getUsers = async(req, res)=> {
     }
 }
 
+const register_admin = async(req, res) => {
+    try {
+
+        const { email } = req.body.email
+        console.log(email)
+
+        const user_exist= await models.User.findOne({email: req.body.email})
+
+        if(user_exist) {
+            res.status(403).json({
+                msg: "Ya existe un usuario registrado con el email: " + req.body.email
+            })
+        }
+
+        //Encriptación de contraseña
+        req.body.password= await bcrypt.hash(req.body.password, 10);
+
+        if(req.files && req.files.avatar) {
+            var img_path = req.files.avatar.path
+            var name = img_path.split("\\")
+            var avatar_name = name[2]
+            req.name.avatar = avatar_name
+        }
+
+        const User = await models.User.create(req.body)    
+        res.status(200).json({
+            msg: "Registro guardado exitosamente",
+            user: User
+        })
+    } catch(error) {
+        console.log(error)
+        res.status(500).send({ message: 'Error inesperado' })
+    }
+}
+
 export default {
     getUsers,
     register,
