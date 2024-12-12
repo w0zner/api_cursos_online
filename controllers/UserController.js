@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import token from "../services/token"
 import fs from 'fs'
 import path from 'path'
+import resource from '../resources'
 
 const register = async(req, res)=> {
     try {
@@ -168,8 +169,7 @@ const register_admin = async(req, res) => {
 
         const User = await models.User.create(req.body)    
         res.status(200).json({
-            msg: "Registro guardado exitosamente",
-            user: User
+            user: resource.User.api_resource_user(User)
         })
     } catch(error) {
         console.log(error)
@@ -227,10 +227,13 @@ const update =  async(req, res) => {
             req.name.avatar = avatar_name
         }
 
-        const User = await models.User.findByIdAndUpdate({_id: req.body._id}, req.body)    
+        const User = await models.User.findByIdAndUpdate({_id: req.body._id}, req.body)   
+        
+        const NUser = await models.User.findById({_id: req.body._id})
+
         res.status(200).json({
             msg: "Registro actualizado   exitosamente",
-            user: User
+            user: resource.User.api_resource_user(NUser)
         })
     } catch(error) {
         console.log(error)
@@ -249,6 +252,10 @@ const listUsers = async(req, res)=> {
                 {'email': new RegExp(search, 'i')}
             ]
         }).sort({'createdAt': -1})
+
+        USERS = USERS.map((user) => {
+            return resource.User.api_resource_user(user)
+        })
 
         res.status(200).json(
             {users: USERS}
